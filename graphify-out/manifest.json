@@ -1,0 +1,217 @@
+{
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\hooks.json": {
+    "mtime": 1781495005.359797,
+    "ast_hash": "4a7a96e39338492c46822edf2d3c32c5",
+    "semantic_hash": "4a7a96e39338492c46822edf2d3c32c5"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.impeccable\\live\\config.json": {
+    "mtime": 1781495286.2503185,
+    "ast_hash": "db3f47aa64932b4c922bce752e0e6e0c",
+    "semantic_hash": "db3f47aa64932b4c922bce752e0e6e0c"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\eslint.config.js": {
+    "mtime": 1780996974.9409943,
+    "ast_hash": "0355276bc79439afe3c53e3a2470ca1e",
+    "semantic_hash": "0355276bc79439afe3c53e3a2470ca1e"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\package.json": {
+    "mtime": 1781057929.1971667,
+    "ast_hash": "374b540d1b9f96d8428526422927b9d0",
+    "semantic_hash": "374b540d1b9f96d8428526422927b9d0"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\App.tsx": {
+    "mtime": 1781495248.7151294,
+    "ast_hash": "d0dbe7e47401753e41017f0779d8eafe",
+    "semantic_hash": "d0dbe7e47401753e41017f0779d8eafe"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\components\\ControlBank.tsx": {
+    "mtime": 1781059155.3795135,
+    "ast_hash": "7e05d3e00bf5d28f8994164ba9e54b50",
+    "semantic_hash": "7e05d3e00bf5d28f8994164ba9e54b50"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\components\\GenreSelector.tsx": {
+    "mtime": 1781062970.9524806,
+    "ast_hash": "a631595668efac141b68a99c85fa9c07",
+    "semantic_hash": "a631595668efac141b68a99c85fa9c07"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\components\\HandTracker.tsx": {
+    "mtime": 1781495045.1267354,
+    "ast_hash": "7a1ab116bf361d2018339e9cfe8ac746",
+    "semantic_hash": "7a1ab116bf361d2018339e9cfe8ac746"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\components\\MusicInfoPanel.tsx": {
+    "mtime": 1781064280.3707128,
+    "ast_hash": "bd3258046979047fdb11c54a09877047",
+    "semantic_hash": "bd3258046979047fdb11c54a09877047"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\components\\RaveNodeScene.tsx": {
+    "mtime": 1781065223.1411512,
+    "ast_hash": "4ea9378c17a7ec671d4ff48864bcae8b",
+    "semantic_hash": "4ea9378c17a7ec671d4ff48864bcae8b"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\components\\StatusPill.tsx": {
+    "mtime": 1781059146.8080785,
+    "ast_hash": "b2fd0884feb1746240c8f5d3e8721b81",
+    "semantic_hash": "b2fd0884feb1746240c8f5d3e8721b81"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\components\\VisualSelector.tsx": {
+    "mtime": 1781063387.3830974,
+    "ast_hash": "ca738f72836b5ce49afb55bc5c01820d",
+    "semantic_hash": "ca738f72836b5ce49afb55bc5c01820d"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\domain\\musicPresets.ts": {
+    "mtime": 1781062936.4821916,
+    "ast_hash": "48b93ca21830882fc0935bb23575ae26",
+    "semantic_hash": "48b93ca21830882fc0935bb23575ae26"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\domain\\raveControls.ts": {
+    "mtime": 1781062645.4132533,
+    "ast_hash": "80e10d8c09a040527ad77f9f72c1dd1a",
+    "semantic_hash": "80e10d8c09a040527ad77f9f72c1dd1a"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\domain\\visualPresets.ts": {
+    "mtime": 1781063362.7161064,
+    "ast_hash": "188acc1e4c4e30980cd7569e46c87d65",
+    "semantic_hash": "188acc1e4c4e30980cd7569e46c87d65"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\hooks\\useRaveEngine.ts": {
+    "mtime": 1781065352.550176,
+    "ast_hash": "5306d6854bd855d2429aebdb637bedb7",
+    "semantic_hash": "5306d6854bd855d2429aebdb637bedb7"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\main.tsx": {
+    "mtime": 1780996975.1835625,
+    "ast_hash": "787e5a07efeb2bf6209d5937195f2f68",
+    "semantic_hash": "787e5a07efeb2bf6209d5937195f2f68"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\store\\useRaveStore.ts": {
+    "mtime": 1781063629.319297,
+    "ast_hash": "c893df3eb973b7289a4c52ca856fc577",
+    "semantic_hash": "c893df3eb973b7289a4c52ca856fc577"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\utils\\audioSamples.ts": {
+    "mtime": 1781062947.2448478,
+    "ast_hash": "5fa308b2a54b90c34fcb4a61b1474810",
+    "semantic_hash": "5fa308b2a54b90c34fcb4a61b1474810"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\utils\\handTracking.ts": {
+    "mtime": 1781062761.1197999,
+    "ast_hash": "536c32bf0d00c029943fc86c55c789b0",
+    "semantic_hash": "536c32bf0d00c029943fc86c55c789b0"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\utils\\harmony.ts": {
+    "mtime": 1781064386.8167093,
+    "ast_hash": "279c3563ebd1bcb9f35ec9f2fa79f39a",
+    "semantic_hash": "279c3563ebd1bcb9f35ec9f2fa79f39a"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\tsconfig.app.json": {
+    "mtime": 1780996974.9872713,
+    "ast_hash": "136630b5accce1ca50663df229534a26",
+    "semantic_hash": "136630b5accce1ca50663df229534a26"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\tsconfig.json": {
+    "mtime": 1780996974.9937882,
+    "ast_hash": "a3d39fa780ebff65444de257f291ce6c",
+    "semantic_hash": "a3d39fa780ebff65444de257f291ce6c"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\tsconfig.node.json": {
+    "mtime": 1780996975.0003047,
+    "ast_hash": "70bdd0a673bcfc0e828080b306e7c680",
+    "semantic_hash": "70bdd0a673bcfc0e828080b306e7c680"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\vite.config.ts": {
+    "mtime": 1781057932.7973514,
+    "ast_hash": "8be68439402492554df13a2c506303a5",
+    "semantic_hash": "8be68439402492554df13a2c506303a5"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\SKILL.md": {
+    "mtime": 1781495005.3291,
+    "ast_hash": "5c72924d8902cf334936c5827ff65349",
+    "semantic_hash": "5c72924d8902cf334936c5827ff65349"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\references\\add-watch.md": {
+    "mtime": 1781490360.8124943,
+    "ast_hash": "0df0589623217ca38a12bdcabfb42f4c",
+    "semantic_hash": "0df0589623217ca38a12bdcabfb42f4c"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\references\\exports.md": {
+    "mtime": 1781490360.8134966,
+    "ast_hash": "c04ddf8f1f5ef5e262ebec491a523c74",
+    "semantic_hash": "c04ddf8f1f5ef5e262ebec491a523c74"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\references\\extraction-spec.md": {
+    "mtime": 1781490360.8144953,
+    "ast_hash": "a86a7321597b23cc2b22e011b3dc6e1d",
+    "semantic_hash": "a86a7321597b23cc2b22e011b3dc6e1d"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\references\\github-and-merge.md": {
+    "mtime": 1781490360.8184958,
+    "ast_hash": "cde13df085e4c492aeb7ba298a996d0d",
+    "semantic_hash": "cde13df085e4c492aeb7ba298a996d0d"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\references\\hooks.md": {
+    "mtime": 1781490360.8195655,
+    "ast_hash": "3f545db6ce646650bb9de588f5512a27",
+    "semantic_hash": "3f545db6ce646650bb9de588f5512a27"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\references\\query.md": {
+    "mtime": 1781490360.8195655,
+    "ast_hash": "c2a8e798674a81b02aa9975f43023819",
+    "semantic_hash": "c2a8e798674a81b02aa9975f43023819"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\references\\transcribe.md": {
+    "mtime": 1781490360.820566,
+    "ast_hash": "70f6aa30d6211f3a2c7e9fc45479f50c",
+    "semantic_hash": "70f6aa30d6211f3a2c7e9fc45479f50c"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\.codex\\skills\\graphify\\references\\update.md": {
+    "mtime": 1781490360.823567,
+    "ast_hash": "0dad167a95bdb389f02fecffb60b1bc8",
+    "semantic_hash": "0dad167a95bdb389f02fecffb60b1bc8"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\AGENTS.md": {
+    "mtime": 1781494802.142698,
+    "ast_hash": "145800d1b28964ec440a6ee91beb4d44",
+    "semantic_hash": "145800d1b28964ec440a6ee91beb4d44"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\PRODUCT.md": {
+    "mtime": 1781495002.910192,
+    "ast_hash": "2a060c453a1512cd88efc9c908768fa2",
+    "semantic_hash": "2a060c453a1512cd88efc9c908768fa2"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\README.md": {
+    "mtime": 1781065913.594104,
+    "ast_hash": "21c809b54ebee48cfebf8c5d657b618c",
+    "semantic_hash": "21c809b54ebee48cfebf8c5d657b618c"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\index.html": {
+    "mtime": 1781057725.340375,
+    "ast_hash": "61176656d27663735ade663f42d59139",
+    "semantic_hash": "61176656d27663735ade663f42d59139"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\public\\favicon.svg": {
+    "mtime": 1780996975.077277,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": "7e840862161341271697daa99a40d76b"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\public\\icons.svg": {
+    "mtime": 1780996975.1058345,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": "3b4fcfcf393eca4d264dca4a4663bc37"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\assets\\hero.png": {
+    "mtime": 1780996975.0324674,
+    "ast_hash": "aead493361b27e7510691c5d7072dfc1",
+    "semantic_hash": "aead493361b27e7510691c5d7072dfc1"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\assets\\react.svg": {
+    "mtime": 1780996975.1296124,
+    "ast_hash": "f0402b67b6ce880f65666bb49e841696",
+    "semantic_hash": "f0402b67b6ce880f65666bb49e841696"
+  },
+  "C:\\Users\\Test\\Documents\\Portafolio\\WebSite\\hand-music-controller\\src\\assets\\vite.svg": {
+    "mtime": 1780996975.1477745,
+    "ast_hash": "9960a24288958394ac50e57ff638b036",
+    "semantic_hash": "9960a24288958394ac50e57ff638b036"
+  }
+}

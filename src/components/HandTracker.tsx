@@ -14,12 +14,17 @@ import {
 type HandTrackerProps = {
   onStartAudio: () => Promise<void>
   onStopAudio: () => void
+  showLandmarks: boolean
 }
 
 const ACTIVE_DETECTION_INTERVAL_MS = 33
 const IDLE_DETECTION_INTERVAL_MS = 42
 
-export function HandTracker({ onStartAudio, onStopAudio }: HandTrackerProps) {
+export function HandTracker({
+  onStartAudio,
+  onStopAudio,
+  showLandmarks,
+}: HandTrackerProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const handLandmarkerRef = useRef<HandLandmarker | null>(null)
@@ -77,7 +82,12 @@ export function HandTracker({ onStartAudio, onStopAudio }: HandTrackerProps) {
         const nextSignal = readHandSignal(result)
 
         detectedHandCountRef.current = nextSignal.hands.length
-        drawHandOverlay(canvas, video, result)
+        if (showLandmarks) {
+          drawHandOverlay(canvas, video, result)
+        } else {
+          clearCanvas(canvas)
+        }
+
         commitSignal(nextSignal)
       }
 
@@ -85,7 +95,7 @@ export function HandTracker({ onStartAudio, onStopAudio }: HandTrackerProps) {
     }
 
     tick()
-  }, [commitSignal])
+  }, [commitSignal, showLandmarks])
 
   const startTracking = useCallback(async () => {
     if (status === 'loading' || status === 'tracking') {
@@ -144,7 +154,11 @@ export function HandTracker({ onStartAudio, onStopAudio }: HandTrackerProps) {
     <section className="camera-panel" aria-label="Control de camara">
       <div className="camera-frame">
         <video ref={videoRef} muted playsInline />
-        <canvas ref={canvasRef} />
+        <canvas
+          aria-hidden="true"
+          className={showLandmarks ? undefined : 'landmarks-hidden'}
+          ref={canvasRef}
+        />
         <div className="scan-line" aria-hidden="true" />
       </div>
 

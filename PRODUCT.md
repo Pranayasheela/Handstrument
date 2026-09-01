@@ -10,7 +10,7 @@ Creative developers, musicians, interactive designers, and portfolio visitors ex
 
 ## Product Purpose
 
-Hand Music Controller turns webcam hand gestures into an expressive electronic music instrument. Success means a visitor understands the interaction within seconds, can start the camera/audio flow confidently, and sees immediate sound plus visual feedback from their hands.
+Handstrument turns webcam hand gestures into an expressive electronic music instrument. Success means a visitor understands the interaction within seconds, can start the camera/audio flow confidently, and sees immediate sound plus visual feedback from their hands.
 
 ## Brand Personality
 

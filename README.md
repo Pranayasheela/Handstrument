@@ -35,7 +35,6 @@ leaves your machine.
 - [Scripts](#scripts)
 - [Browser support & requirements](#browser-support--requirements)
 - [Developer notes](#developer-notes)
-- [Credits](#credits)
 
 ---
 
@@ -331,9 +330,16 @@ npm run dev
 
 Open the URL Vite prints (usually `http://localhost:5173`).
 
-### Deploy
+### Deploy / live demo
 
-It's a static site — any static host works (Vercel, Netlify, GitHub Pages).
+It's a static site — any static host works.
+
+**Vercel (one click, recommended):** go to [vercel.com/new](https://vercel.com/new),
+import this repository, and deploy. The framework is auto-detected as Vite —
+no configuration needed. You get a public URL to share and drop at the top of
+this README.
+
+**Build locally:**
 
 ```bash
 npm run build      # outputs to dist/
@@ -386,18 +392,3 @@ Type-check on its own: `npx tsc -b`
   These are stripped from the production build.
 - **No tests** are configured. `harmony.ts`, `calibration.ts` and the sample
   script are pure functions and the natural first place to add [Vitest](https://vitest.dev/).
-
----
-
-## Credits
-
-Built with these open-source projects:
-
-- **Hand tracking** — [Google MediaPipe](https://ai.google.dev/edge/mediapipe) (Tasks Vision / HandLandmarker)
-- **Audio** — [Tone.js](https://tonejs.github.io/)
-- **3D visuals** — [three.js](https://threejs.org/) and [React Three Fiber](https://r3f.docs.pmnd.rs/)
-- **State** — [Zustand](https://zustand.docs.pmnd.rs/) · **Icons** — [Lucide](https://lucide.dev/)
-
-The initial project scaffold came from a small open-source hand-tracking demo;
-the Studio features, sample engine and harmony rework in this repo were built on
-top of it.

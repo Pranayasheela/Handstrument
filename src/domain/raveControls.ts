@@ -3,6 +3,9 @@ export type HandSide = 'Left' | 'Right'
 export type ControlKey = `${HandSide}-${FingerId}`
 export type TrackerStatus = 'idle' | 'loading' | 'tracking' | 'error'
 
+/** Rhythm looper lifecycle: idle → armed (waiting for the bar) → recording → playing. */
+export type LooperState = 'idle' | 'armed' | 'recording' | 'playing'
+
 export type FingerControl = {
   key: ControlKey
   side: HandSide
@@ -48,7 +51,10 @@ export type DetectedHand = {
   activeKeys: ControlKey[]
   score: number
   center: [number, number]
+  /** Motion after user calibration is applied — this drives audio and visuals. */
   motion: HandMotion
+  /** Motion straight from the tracker, before calibration (used by the calibration UI). */
+  rawMotion: HandMotion
 }
 
 export type HandSignal = {

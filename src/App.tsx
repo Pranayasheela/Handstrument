@@ -5,6 +5,7 @@ import {
   Code2,
   Eye,
   Hand,
+  Keyboard,
   Mic2,
   Radio,
   ShieldCheck,
@@ -19,6 +20,7 @@ import { HandTracker } from './components/HandTracker'
 import { MusicInfoPanel } from './components/MusicInfoPanel'
 import { RaveNodeScene } from './components/RaveNodeScene'
 import { StatusPill } from './components/StatusPill'
+import { StudioRack } from './components/StudioRack'
 import { VisualSelector } from './components/VisualSelector'
 import { getMusicPreset } from './domain/musicPresets'
 import { getVisualPreset } from './domain/visualPresets'
@@ -28,6 +30,7 @@ import {
   RIGHT_CONTROLS,
   type FingerControl,
 } from './domain/raveControls'
+import { useKeyboardControls } from './hooks/useKeyboardControls'
 import { useRaveEngine } from './hooks/useRaveEngine'
 import { useRaveStore } from './store/useRaveStore'
 import { getChordLabel } from './utils/harmony'
@@ -40,6 +43,7 @@ function App() {
   const status = useRaveStore((state) => state.status)
   const message = useRaveStore((state) => state.message)
   const audioReady = useRaveStore((state) => state.audioReady)
+  const keyboardEnabled = useRaveStore((state) => state.keyboardEnabled)
   const selectedPresetId = useRaveStore((state) => state.selectedPresetId)
   const selectedVisualPresetId = useRaveStore(
     (state) => state.selectedVisualPresetId,
@@ -73,7 +77,11 @@ function App() {
       return { ...control, label }
     })
   }, [selectedPreset])
-  const { startAudio, stopAudio } = useRaveEngine(selectedPreset, setAudioReady)
+  const { startAudio, stopAudio, looperArm, looperClear } = useRaveEngine(
+    selectedPreset,
+    setAudioReady,
+  )
+  useKeyboardControls(keyboardEnabled && status !== 'tracking')
   const detectedLabel =
     signal.hands.length > 0
       ? signal.hands.map((hand) => hand.label).join(' + ')
@@ -146,7 +154,7 @@ function App() {
         <div className="instrument-panel">
           <header className="topbar">
             <div className="hero-copy">
-              <p className="eyebrow">Two hand rave controller</p>
+              <p className="eyebrow">Handstrument</p>
               <h1>Control Music With Your Hands</h1>
               <p>
                 Use your webcam to turn hand gestures into sound, rhythm, and
@@ -158,7 +166,7 @@ function App() {
                 </a>
                 <a
                   className="secondary-link"
-                  href="https://github.com/JayusAsterion/hand-music-controller"
+                  href="https://github.com/Pranayasheela/handstrument"
                   rel="noreferrer"
                   target="_blank"
                 >
@@ -193,6 +201,10 @@ function App() {
             <p>
               <ShieldCheck size={15} />
               Camera runs locally in your browser. No video is uploaded.
+            </p>
+            <p>
+              <Keyboard size={15} />
+              No webcam? Turn on Keyboard mode in the Studio panel below.
             </p>
           </section>
 
@@ -301,6 +313,12 @@ function App() {
               AI voice guide
             </label>
           </section>
+
+          <StudioRack
+            onLooperArm={looperArm}
+            onLooperClear={looperClear}
+            onStartAudio={handleStart}
+          />
 
           <section className="gesture-guide" aria-label="Gesture guide">
             <div>

@@ -11,6 +11,11 @@ import {
   type HandSide,
   type HandSignal,
 } from '../domain/raveControls'
+import {
+  applyCalibration,
+  DEFAULT_CALIBRATION,
+  type Calibration,
+} from '../domain/calibration'
 
 export const MODEL_URL =
   'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task'
@@ -47,20 +52,29 @@ export async function createHandLandmarker(vision: VisionFileset) {
   }
 }
 
-export function readHandSignal(result: HandLandmarkerResult): HandSignal {
+export function readHandSignal(
+  result: HandLandmarkerResult,
+  calibration: Calibration = DEFAULT_CALIBRATION,
+): HandSignal {
   const hands: DetectedHand[] = result.landmarks
     .map((landmarks, index) => {
       const handedness = result.handedness[index]?.[0]
       const side: HandSide = handedness?.categoryName === 'Left' ? 'Left' : 'Right'
-      const activeFingerIds = getRaisedFingers(landmarks, side)
+      const activeFingerIds = getRaisedFingers(
+        landmarks,
+        side,
+        calibration.fingerSensitivity,
+      )
       const activeKeys = activeFingerIds.map((id) => `${side}-${id}` as ControlKey)
+      const rawMotion = getHandMotion(landmarks, activeFingerIds)
 
       return {
         activeFingerIds,
         activeKeys,
         center: getHandCenter(landmarks),
         label: side === 'Left' ? 'Izquierda' : 'Derecha',
-        motion: getHandMotion(landmarks, activeFingerIds),
+        motion: applyCalibration(rawMotion, calibration),
+        rawMotion,
         score: handedness?.score ?? 0,
         side,
       }
@@ -178,14 +192,17 @@ function getHandMotion(
 function getRaisedFingers(
   landmarks: NormalizedLandmark[],
   handedness: HandSide = 'Right',
+  sensitivity = 1,
 ): FingerId[] {
   const raised: FingerId[] = []
   const thumbTip = landmarks[4]
   const thumbIp = landmarks[3]
+  const thumbMargin = 0.03 * sensitivity
+  const fingerMargin = 0.035 * sensitivity
   const thumbOpen =
     handedness === 'Left'
-      ? thumbTip.x > thumbIp.x + 0.03
-      : thumbTip.x < thumbIp.x - 0.03
+      ? thumbTip.x > thumbIp.x + thumbMargin
+      : thumbTip.x < thumbIp.x - thumbMargin
 
   if (thumbOpen) {
     raised.push('thumb')
@@ -199,7 +216,7 @@ function getRaisedFingers(
   ]
 
   fingers.forEach(([id, tip, pip]) => {
-    if (landmarks[tip].y < landmarks[pip].y - 0.035) {
+    if (landmarks[tip].y < landmarks[pip].y - fingerMargin) {
       raised.push(id)
     }
   })

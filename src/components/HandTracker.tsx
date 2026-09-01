@@ -35,10 +35,16 @@ export function HandTracker({
 
   const audioReady = useRaveStore((state) => state.audioReady)
   const status = useRaveStore((state) => state.status)
+  const calibration = useRaveStore((state) => state.calibration)
   const commitSignal = useRaveStore((state) => state.commitSignal)
   const setMessage = useRaveStore((state) => state.setMessage)
   const setSignal = useRaveStore((state) => state.setSignal)
   const setStatus = useRaveStore((state) => state.setStatus)
+
+  const calibrationRef = useRef(calibration)
+  useEffect(() => {
+    calibrationRef.current = calibration
+  }, [calibration])
 
   const stopTracking = useCallback(() => {
     if (animationRef.current !== null) {
@@ -79,7 +85,7 @@ export function HandTracker({
       ) {
         lastDetectionRef.current = now
         const result = handLandmarker.detectForVideo(video, now)
-        const nextSignal = readHandSignal(result)
+        const nextSignal = readHandSignal(result, calibrationRef.current)
 
         detectedHandCountRef.current = nextSignal.hands.length
         if (showLandmarks) {

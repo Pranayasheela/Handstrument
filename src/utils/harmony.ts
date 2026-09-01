@@ -9,30 +9,37 @@ import {
 } from '../domain/raveControls'
 import type { MusicPreset } from '../domain/musicPresets'
 
-const CHORD_LIBRARY: Record<string, { bassNote: string; notes: string[] }> = {
-  A: { bassNote: 'A1', notes: ['A3', 'C#4', 'E4'] },
-  Ab: { bassNote: 'Ab1', notes: ['Ab3', 'C4', 'Eb4'] },
-  Bb: { bassNote: 'Bb1', notes: ['Bb3', 'D4', 'F4'] },
-  Bm: { bassNote: 'B1', notes: ['B3', 'D4', 'F#4'] },
-  C: { bassNote: 'C2', notes: ['C4', 'E4', 'G4'] },
-  Cm: { bassNote: 'C2', notes: ['C4', 'Eb4', 'G4'] },
-  D: { bassNote: 'D2', notes: ['D4', 'F#4', 'A4'] },
-  Eb: { bassNote: 'Eb2', notes: ['Eb4', 'G4', 'Bb4'] },
-  Em: { bassNote: 'E2', notes: ['E3', 'G3', 'B3'] },
-  G: { bassNote: 'G1', notes: ['G3', 'B3', 'D4'] },
+type ChordVoicing = { bassNote: string; notes: string[] }
+
+/**
+ * Each chord is voiced deliberately so the four chords in a progression contrast
+ * in quality *and* register, and the three presets feel like different genres:
+ * Joji = intimate close voicings, Rave = wide two-octave stacks, Lo-fi = jazzy
+ * 7th/9th shapes that jump between low and bright.
+ */
+const CHORD_LIBRARY: Record<string, ChordVoicing> = {
+  // Joji Noir — melancholic alt-R&B, close and emotive
+  Bm9: { bassNote: 'B1', notes: ['B3', 'D4', 'F#4', 'A4', 'C#5'] },
+  Gmaj7: { bassNote: 'G1', notes: ['G3', 'B3', 'D4', 'F#4'] },
+  Em7: { bassNote: 'E1', notes: ['E3', 'G3', 'B3', 'D4'] },
+  'F#7': { bassNote: 'F#1', notes: ['A#3', 'C#4', 'E4', 'F#4'] },
+
+  // Rave Bloom — euphoric festival major, wide and bright
+  Ab: { bassNote: 'Ab1', notes: ['Ab3', 'C4', 'Eb4', 'Ab4', 'C5'] },
+  Eb: { bassNote: 'Eb1', notes: ['Eb3', 'G3', 'Bb3', 'Eb4', 'G4'] },
+  Fm: { bassNote: 'F1', notes: ['F3', 'Ab3', 'C4', 'F4', 'Ab4'] },
+  Db: { bassNote: 'Db1', notes: ['Db3', 'F3', 'Ab3', 'Db4', 'F4'] },
+
+  // Lo-fi Pulse — bedroom jazz, 7th/9th shapes across the register
+  Am9: { bassNote: 'A1', notes: ['A3', 'C4', 'E4', 'G4', 'B4'] },
+  D9: { bassNote: 'D1', notes: ['D3', 'F#3', 'C4', 'E4'] },
+  Bm7: { bassNote: 'B1', notes: ['B2', 'D3', 'F#3', 'A3'] },
+  Cmaj7: { bassNote: 'C2', notes: ['C4', 'E4', 'G4', 'B4', 'D5'] },
 }
 
-const EXTENSION_BY_CHORD: Record<string, Record<ChordColor, string[]>> = {
-  A: { add9: ['B4'], octave: ['A4', 'C#5', 'E5', 'B5'], seventh: ['G4', 'B4'], triad: [] },
-  Ab: { add9: ['Bb4'], octave: ['Ab4', 'C5', 'Eb5', 'Bb5'], seventh: ['G4', 'Bb4'], triad: [] },
-  Bb: { add9: ['C5'], octave: ['Bb4', 'D5', 'F5', 'C6'], seventh: ['Ab4', 'C5'], triad: [] },
-  Bm: { add9: ['C#5'], octave: ['B4', 'D5', 'F#5', 'C#6'], seventh: ['A4', 'C#5'], triad: [] },
-  C: { add9: ['D5'], octave: ['C5', 'E5', 'G5', 'D6'], seventh: ['B4', 'D5'], triad: [] },
-  Cm: { add9: ['D5'], octave: ['C5', 'Eb5', 'G5', 'D6'], seventh: ['Bb4', 'D5'], triad: [] },
-  D: { add9: ['E5'], octave: ['D5', 'F#5', 'A5', 'E6'], seventh: ['C#5', 'E5'], triad: [] },
-  Eb: { add9: ['F5'], octave: ['Eb5', 'G5', 'Bb5', 'F6'], seventh: ['D5', 'F5'], triad: [] },
-  Em: { add9: ['F#4'], octave: ['E4', 'G4', 'B4', 'F#5'], seventh: ['D4', 'F#4'], triad: [] },
-  G: { add9: ['A4'], octave: ['G4', 'B4', 'D5', 'A5'], seventh: ['F#4', 'A4'], triad: [] },
+const FALLBACK_CHORD: ChordVoicing = {
+  bassNote: 'A1',
+  notes: ['A3', 'C4', 'E4'],
 }
 
 export function getConnectedChord(
@@ -51,9 +58,12 @@ export function getConnectedChord(
   const rightHand = hands.find((hand) => hand.side === 'Right')
   const profile = getExpressionProfile(rightHand)
   const chordName = getChordNameFromKey(rightKey, preset)
-  const base = CHORD_LIBRARY[chordName] ?? CHORD_LIBRARY.Bm
-  const extensions = EXTENSION_BY_CHORD[chordName]?.[profile.color] ?? []
-  const notes = applyInversion(uniqueNotes([...base.notes, ...extensions]), profile.inversion)
+  const base = CHORD_LIBRARY[chordName] ?? FALLBACK_CHORD
+  const extensions = colorExtensions(base.notes, profile.color)
+  const notes = applyInversion(
+    uniqueNotes([...base.notes, ...extensions]),
+    profile.inversion,
+  )
 
   return {
     altitudeName: profile.heightName,
@@ -104,10 +114,10 @@ function getExpressionProfile(hand?: DetectedHand) {
     color === 'octave'
       ? 'Open'
       : color === 'seventh'
-        ? 'Maj7'
+        ? 'Bright'
         : color === 'add9'
-          ? 'Add9'
-          : 'Pad'
+          ? 'Wide'
+          : 'Core'
 
   const inversion = roll > 0.22 ? 1 : roll < -0.22 ? 2 : 0
   const inversionName =
@@ -120,6 +130,26 @@ function getExpressionProfile(hand?: DetectedHand) {
     heightName: getHeightName(heightBand),
     inversion,
     inversionName,
+  }
+}
+
+/**
+ * Hand "colour" stacks consonant octaves / a 9th on top of the voiced chord, so
+ * opening the hand widens and brightens the same chord without ever clashing
+ * with its own quality (works over major, minor and dominant shapes alike).
+ */
+function colorExtensions(notes: string[], color: ChordColor): string[] {
+  const root = notes[0]
+
+  switch (color) {
+    case 'add9':
+      return [transposeSemitones(root, 14)]
+    case 'seventh':
+      return [transposeSemitones(root, 14), transposeSemitones(root, 19)]
+    case 'octave':
+      return [transposeSemitones(root, 12), transposeSemitones(root, 24)]
+    default:
+      return []
   }
 }
 
@@ -141,12 +171,56 @@ function applyInversion(notes: string[], inversion: number) {
   }
 
   return notes.map((note, index) =>
-    index < inversion ? transposeOctave(note, 1) : note,
+    index < inversion ? transposeSemitones(note, 12) : note,
   )
 }
 
-function transposeOctave(note: string, octaveShift: number) {
-  return note.replace(/(-?\d+)$/, (octave) => `${Number(octave) + octaveShift}`)
+const SEMITONE_BY_NAME: Record<string, number> = {
+  C: 0,
+  'C#': 1,
+  Db: 1,
+  D: 2,
+  'D#': 3,
+  Eb: 3,
+  E: 4,
+  F: 5,
+  'F#': 6,
+  Gb: 6,
+  G: 7,
+  'G#': 8,
+  Ab: 8,
+  A: 9,
+  'A#': 10,
+  Bb: 10,
+  B: 11,
+}
+
+const NAME_BY_SEMITONE = [
+  'C',
+  'C#',
+  'D',
+  'D#',
+  'E',
+  'F',
+  'F#',
+  'G',
+  'G#',
+  'A',
+  'A#',
+  'B',
+]
+
+function transposeSemitones(note: string, semitones: number) {
+  const match = note.match(/^([A-G][#b]?)(-?\d+)$/)
+
+  if (!match) {
+    return note
+  }
+
+  const midi = (Number(match[2]) + 1) * 12 + (SEMITONE_BY_NAME[match[1]] ?? 0)
+  const shifted = midi + semitones
+
+  return NAME_BY_SEMITONE[((shifted % 12) + 12) % 12] + (Math.floor(shifted / 12) - 1)
 }
 
 function normalizeAngle(value: number) {

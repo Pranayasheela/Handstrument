@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useRef } from 'react'
 import * as Tone from 'tone'
-import type {
-  ControlKey,
-  DetectedHand,
-  HandSignal,
+import {
+  BEAT_KEYS,
+  type ControlKey,
+  type DetectedHand,
+  type HandSignal,
+  type LooperState,
 } from '../domain/raveControls'
 import type { MusicPreset, SampleSlot } from '../domain/musicPresets'
 import { useRaveStore } from '../store/useRaveStore'
 import { resolvePresetSamples } from '../utils/audioSamples'
 import { getConnectedChord } from '../utils/harmony'
-
 export function useRaveEngine(
   preset: MusicPreset,
   setAudioReady: (ready: boolean) => void,
@@ -39,6 +40,31 @@ export function useRaveEngine(
   const beatStepRef = useRef(0)
   const presetRef = useRef(preset)
 
+  // Rhythm looper: a ring buffer of the left-hand beat keys held at each 16th step.
+  const looperStateRef = useRef<LooperState>('idle')
+  const looperPatternRef = useRef<Array<Set<ControlKey>>>([])
+  const looperArmTickRef = useRef(0)
+  const looperRecordedRef = useRef(0)
+
+  const setLooperState = useCallback((next: LooperState) => {
+    looperStateRef.current = next
+    useRaveStore.getState().setLooperState(next)
+  }, [])
+
+  const isBeatActive = useCallback((key: ControlKey) => {
+    if (activeKeysRef.current.has(key)) {
+      return true
+    }
+
+    const pattern = looperPatternRef.current
+
+    if (looperStateRef.current !== 'playing' || pattern.length === 0) {
+      return false
+    }
+
+    return pattern[loopStep(pattern.length)]?.has(key) ?? false
+  }, [])
+
   const applyGestureModulation = useCallback((nextPreset: MusicPreset) => {
     const leftMotion = getHandMotion(handsRef.current, 'Left')
     const rightMotion = getHandMotion(handsRef.current, 'Right')
@@ -49,9 +75,9 @@ export function useRaveEngine(
 
     Tone.Transport.bpm.rampTo(nextPreset.bpm, 0.12)
     kickRef.current?.volume.rampTo(-8 + leftMotion.height * 2, 0.08)
-    hatRef.current?.volume.rampTo(-25 + leftMotion.openness * 5, 0.08)
-    clapRef.current?.volume.rampTo(-14 + Math.max(leftRoll, leftMotion.x) * 3, 0.08)
-    acidRef.current?.volume.rampTo(-17 + leftMotion.x * 4, 0.08)
+    hatRef.current?.volume.rampTo(-13 + leftMotion.openness * 8, 0.08)
+    clapRef.current?.volume.rampTo(-11 + Math.max(leftRoll, leftMotion.x) * 3, 0.08)
+    acidRef.current?.volume.rampTo(-10 + leftMotion.x * 4, 0.08)
 
     filterRef.current?.frequency.rampTo(650 + rightMotion.height * 4300, 0.12)
     padRef.current?.volume.rampTo(-25 + rightExpression * 12, 0.12)
@@ -210,7 +236,7 @@ export function useRaveEngine(
         new Tone.Loop((time) => {
           const leftMotion = getHandMotion(handsRef.current, 'Left')
 
-          if (activeKeysRef.current.has('Left-thumb')) {
+          if (isBeatActive('Left-thumb')) {
             const velocity = 0.7 + leftMotion.height * 0.3
 
             if (!triggerSample('kick', time)) {
@@ -225,24 +251,25 @@ export function useRaveEngine(
         }, '4n').start(0),
         new Tone.Loop((time) => {
           const leftMotion = getHandMotion(handsRef.current, 'Left')
+          // Steady 8th-note hats by default; open the hand for full 16ths.
           const isDenseStep =
-            leftMotion.openness > 0.62 || beatStepRef.current % 2 === 0
+            leftMotion.openness > 0.55 || beatStepRef.current % 2 === 0
 
-          if (activeKeysRef.current.has('Left-index') && isDenseStep) {
+          if (isBeatActive('Left-index') && isDenseStep) {
             if (!triggerSample('hat', time)) {
               hatRef.current?.triggerAttackRelease('32n', time)
             }
           }
         }, '16n').start(0),
         new Tone.Loop((time) => {
-          if (activeKeysRef.current.has('Left-middle')) {
+          if (isBeatActive('Left-middle')) {
             if (!triggerSample('snare', time)) {
               clapRef.current?.triggerAttackRelease('16n', time)
             }
           }
         }, '2n').start('2n'),
         new Tone.Loop((time) => {
-          if (activeKeysRef.current.has('Left-ring')) {
+          if (isBeatActive('Left-ring')) {
             if (!triggerSample('clap', time)) {
               clapRef.current?.triggerAttackRelease('16n', time)
             }
@@ -251,7 +278,7 @@ export function useRaveEngine(
         new Tone.Loop((time) => {
           const leftMotion = getHandMotion(handsRef.current, 'Left')
 
-          if (activeKeysRef.current.has('Left-pinky')) {
+          if (isBeatActive('Left-pinky')) {
             if (!triggerSample('perc', time)) {
               const note = leftMotion.x > 0.55 ? 'F#2' : 'E2'
               acidRef.current?.triggerAttackRelease(note, '16n', time)
@@ -274,6 +301,43 @@ export function useRaveEngine(
         new Tone.Loop(() => {
           beatStepRef.current += 1
         }, '16n').start(0),
+        new Tone.Loop(() => {
+          const state = looperStateRef.current
+
+          if (state === 'idle' || state === 'playing') {
+            return
+          }
+
+          const pattern = looperPatternRef.current
+
+          if (pattern.length === 0) {
+            return
+          }
+
+          if (state === 'armed') {
+            if (Tone.Transport.ticks < looperArmTickRef.current) {
+              return
+            }
+
+            looperRecordedRef.current = 0
+            setLooperState('recording')
+          }
+
+          const slot = pattern[loopStep(pattern.length)]
+          slot.clear()
+
+          for (const key of BEAT_KEYS) {
+            if (activeKeysRef.current.has(key)) {
+              slot.add(key)
+            }
+          }
+
+          looperRecordedRef.current += 1
+
+          if (looperRecordedRef.current >= pattern.length) {
+            setLooperState('playing')
+          }
+        }, '16n').start(0),
       ]
     }
 
@@ -285,7 +349,31 @@ export function useRaveEngine(
     }
 
     setAudioReady(true)
-  }, [setAudioReady, updateFromSignal])
+  }, [isBeatActive, setAudioReady, setLooperState, updateFromSignal])
+
+  const looperArm = useCallback(() => {
+    if (!bassRef.current) {
+      return
+    }
+
+    const bars = Math.max(1, useRaveStore.getState().looperBars)
+    looperPatternRef.current = Array.from(
+      { length: bars * 16 },
+      () => new Set<ControlKey>(),
+    )
+
+    const ticksPerBar = Tone.Transport.PPQ * 4
+    looperArmTickRef.current =
+      Math.ceil((Tone.Transport.ticks + 1) / ticksPerBar) * ticksPerBar
+    looperRecordedRef.current = 0
+    setLooperState('armed')
+  }, [setLooperState])
+
+  const looperClear = useCallback(() => {
+    looperPatternRef.current = []
+    looperRecordedRef.current = 0
+    setLooperState('idle')
+  }, [setLooperState])
 
   const stopAudio = useCallback(() => {
     bassRef.current?.triggerRelease()
@@ -296,8 +384,11 @@ export function useRaveEngine(
     activeLeadNotesRef.current.clear()
     activePadNotesRef.current.clear()
     activeBassNoteRef.current = null
+    looperPatternRef.current = []
+    looperRecordedRef.current = 0
+    setLooperState('idle')
     setAudioReady(false)
-  }, [setAudioReady])
+  }, [setAudioReady, setLooperState])
 
   useEffect(() => {
     presetRef.current = preset
@@ -318,6 +409,23 @@ export function useRaveEngine(
 
     return unsubscribe
   }, [updateFromSignal])
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) {
+      return
+    }
+
+    const debug = globalThis as {
+      raveLooper?: () => unknown
+      raveMaster?: () => Tone.ToneAudioNode | null
+    }
+    debug.raveLooper = () => ({
+      state: looperStateRef.current,
+      recorded: looperRecordedRef.current,
+      pattern: looperPatternRef.current.map((keys) => [...keys]),
+    })
+    debug.raveMaster = () => masterRef.current
+  }, [])
 
   useEffect(
     () => () => {
@@ -340,7 +448,7 @@ export function useRaveEngine(
     [],
   )
 
-  return { startAudio, stopAudio }
+  return { startAudio, stopAudio, looperArm, looperClear }
 
   function syncSamples(nextPreset: MusicPreset, output: Tone.ToneAudioNode | null) {
     if (!output || samplePresetRef.current === nextPreset.id) {
@@ -355,6 +463,7 @@ export function useRaveEngine(
       players[slot as SampleSlot] = new Tone.Player({
         autostart: false,
         url,
+        volume: SAMPLE_GAIN_DB[slot as SampleSlot] ?? 0,
       }).connect(output)
 
       return players
@@ -374,6 +483,14 @@ export function useRaveEngine(
   }
 }
 
+// Per-slot playback trim (dB) so the softer one-shots carry over the pad wash.
+const SAMPLE_GAIN_DB: Partial<Record<SampleSlot, number>> = {
+  hat: 8,
+  perc: 5,
+  clap: 3,
+  snare: 2,
+}
+
 function getHandMotion(hands: DetectedHand[], side: 'Left' | 'Right') {
   return (
     hands.find((hand) => hand.side === side)?.motion ?? {
@@ -389,4 +506,15 @@ function getHandMotion(hands: DetectedHand[], side: 'Left' | 'Right') {
 
 function normalizeAngle(value: number) {
   return Math.min(1, Math.abs(value) / Math.PI)
+}
+
+/**
+ * Current 16th-note index within a looper pattern, derived from the absolute
+ * transport position so recording and playback stay phase-locked regardless of
+ * which bar recording started on.
+ */
+function loopStep(patternLength: number) {
+  const ticksPerSixteenth = Tone.Transport.PPQ / 4
+
+  return Math.floor(Tone.Transport.ticks / ticksPerSixteenth) % patternLength
 }

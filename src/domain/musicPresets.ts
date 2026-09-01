@@ -19,7 +19,7 @@ export const MUSIC_PRESETS: MusicPreset[] = [
     artistReference: 'Alt R&B / melancholic pop',
     bpm: 76,
     mood: 'melancolico, nocturno, aireado',
-    progression: ['Bm', 'G', 'D', 'A'],
+    progression: ['Bm9', 'Gmaj7', 'Em7', 'F#7'],
     sampleHints: {
       clap: ['joji', 'clap', 'snap'],
       hat: ['joji', 'hat', 'shaker'],
@@ -27,8 +27,8 @@ export const MUSIC_PRESETS: MusicPreset[] = [
       perc: ['joji', 'perc', 'foley'],
       snare: ['joji', 'snare', 'rim'],
     },
-    scale: 'B minor',
-    texture: 'Pads suaves, bajo contenido, percusion seca y arpegios espaciados.',
+    scale: 'B minor · i9 – VImaj7 – iv7 – V7',
+    texture: 'Pads suaves y cercanos, bajo contenido, con un V7 que tira de vuelta a casa.',
   },
   {
     id: 'rave-bloom',
@@ -36,7 +36,7 @@ export const MUSIC_PRESETS: MusicPreset[] = [
     artistReference: 'Festival rave / melodic house',
     bpm: 140,
     mood: 'luminoso, euforico, grande',
-    progression: ['Cm', 'Ab', 'Eb', 'Bb'],
+    progression: ['Ab', 'Eb', 'Fm', 'Db'],
     sampleHints: {
       clap: ['rave', 'clap'],
       hat: ['rave', 'hat', 'openhat'],
@@ -44,8 +44,8 @@ export const MUSIC_PRESETS: MusicPreset[] = [
       perc: ['rave', 'perc', 'tom'],
       snare: ['rave', 'snare'],
     },
-    scale: 'C minor',
-    texture: 'Kick firme, hats rapidos, supersaw y acordes abiertos.',
+    scale: 'Ab mayor · I – V – vi – IV',
+    texture: 'Kick firme, hats rapidos y acordes mayores anchos de dos octavas.',
   },
   {
     id: 'lofi-pulse',
@@ -53,7 +53,7 @@ export const MUSIC_PRESETS: MusicPreset[] = [
     artistReference: 'Downtempo / bedroom beat',
     bpm: 92,
     mood: 'calido, intimo, quebrado',
-    progression: ['Em', 'C', 'G', 'D'],
+    progression: ['Am9', 'D9', 'Bm7', 'Cmaj7'],
     sampleHints: {
       clap: ['lofi', 'clap', 'snap'],
       hat: ['lofi', 'hat', 'vinyl'],
@@ -61,8 +61,8 @@ export const MUSIC_PRESETS: MusicPreset[] = [
       perc: ['lofi', 'perc', 'noise'],
       snare: ['lofi', 'snare', 'rim'],
     },
-    scale: 'E minor',
-    texture: 'Golpes suaves, ruido de textura y armonia mas granulada.',
+    scale: 'G mayor (jazz) · ii9 – V9 – iii7 – IVmaj7',
+    texture: 'Golpes suaves, ruido de textura y acordes de septima y novena.',
   },
 ]
 

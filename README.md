@@ -1,5 +1,7 @@
 # Handstrument
 
+**Live demo: https://handstrument.vercel.app**
+
 Turn your **hands** (or your **keyboard**) into an expressive electronic music
 instrument, right in the browser. A webcam tracks your hands in real time; your
 gestures play drums, chords, bass and arpeggios and drive reactive 3D visuals.
@@ -392,3 +394,4 @@ Type-check on its own: `npx tsc -b`
   These are stripped from the production build.
 - **No tests** are configured. `harmony.ts`, `calibration.ts` and the sample
   script are pure functions and the natural first place to add [Vitest](https://vitest.dev/).
+
